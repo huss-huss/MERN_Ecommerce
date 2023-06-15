@@ -49,6 +49,7 @@ export const updateCategory = (req, res) => {
   );
 };
 
+// deleting category
 export const deleteCategory = (req, res) => {
   const q = "DELETE FROM Category WHERE id = ?";
 
