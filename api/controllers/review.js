@@ -1,6 +1,5 @@
 import { db } from "../db.js";
 
-// Get all reviews
 export const getAllReviews = (req, res) => {
   const q = "SELECT * FROM Review";
 
@@ -11,7 +10,6 @@ export const getAllReviews = (req, res) => {
   });
 };
 
-// Get a review by id
 export const getReviewById = (req, res) => {
   const q = "SELECT * FROM Review WHERE id = ?";
 
@@ -22,14 +20,12 @@ export const getReviewById = (req, res) => {
   });
 };
 
-// Add a new review
 export const addReview = (req, res) => {
-  const q =
-    "INSERT INTO Review (product_id, user_id, rating, description) VALUES (?, ?, ?, ?)";
+  const q = "INSERT INTO Review (user_id, product_id, rating, title, description) VALUES (?, ?, ?, ?, ?)";
 
   db.query(
     q,
-    [req.body.product_id, req.body.user_id, req.body.rating, req.body.description],
+    [req.body.user_id, req.body.product_id, req.body.rating, req.body.title, req.body.description],
     (err, data) => {
       if (err) return res.status(500).json(err);
 
@@ -38,13 +34,12 @@ export const addReview = (req, res) => {
   );
 };
 
-// Update a review
 export const updateReview = (req, res) => {
-  const q = "UPDATE Review SET rating = ?, description = ? WHERE id = ?";
+  const q = "UPDATE Review SET user_id = ?, product_id = ?, rating = ?, title = ?, description = ? WHERE id = ?";
 
   db.query(
     q,
-    [req.body.rating, req.body.comment, req.params.id],
+    [req.body.user_id, req.body.product_id, req.body.rating, req.body.title, req.body.description, req.params.id],
     (err, data) => {
       if (err) return res.status(500).json(err);
 
@@ -53,7 +48,6 @@ export const updateReview = (req, res) => {
   );
 };
 
-// Delete a review
 export const deleteReview = (req, res) => {
   const q = "DELETE FROM Review WHERE id = ?";
 

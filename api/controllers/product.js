@@ -22,15 +22,11 @@ export const getProductById = (req, res) => {
 
 export const addProduct = (req, res) => {
   const q =
-    "INSERT INTO Product (name, description, price) VALUES (?, ?, ?)";
+    "INSERT INTO Product (name, description, price, quantity, vendor_id) VALUES (?, ?, ?, ?, ?)";
 
   db.query(
     q,
-    [
-      req.body.name,
-      req.body.description,
-      req.body.price,
-    ],
+    [req.body.name, req.body.description, req.body.price, req.body.quantity, req.body.vendor_id],
     (err, data) => {
       if (err) return res.status(500).json(err);
 
@@ -40,16 +36,11 @@ export const addProduct = (req, res) => {
 };
 
 export const updateProduct = (req, res) => {
-  const q =
-    "UPDATE Product SET name = ?, description = ?, price = ? WHERE id = ?";
+  const q = "UPDATE Product SET name = ?, description = ?, price = ?, quantity = ?, vendor_id = ? WHERE id = ?";
 
   db.query(
     q,
-    [
-      req.body.name,
-      req.body.description,
-      req.body.price,
-    ],
+    [req.body.name, req.body.description, req.body.price, req.body.quantity, req.body.vendor_id, req.params.id],
     (err, data) => {
       if (err) return res.status(500).json(err);
 

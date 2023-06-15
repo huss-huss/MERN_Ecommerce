@@ -1,74 +1,60 @@
-import { db } from '../db.js'
+import { db } from "../db.js";
 
-// Get all User
 export const getAllUsers = (req, res) => {
-  const sql = 'SELECT * FROM User'
-  db.query(sql, (error, results) => {
-    if (error) {
-      res.status(404).json({ message: error.message })
-    } else {
-      res.status(200).json(results)
-    }
-  })
-}
+  const q = "SELECT * FROM User";
 
-// Get a single user by id
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).send(err);
+
+    return res.status(200).json(data);
+  });
+};
+
 export const getUserById = (req, res) => {
-  const { id } = req.params
-  const sql = 'SELECT * FROM User WHERE id = ?'
-  db.query(sql, [id], (error, results) => {
-    if (error) {
-      res.status(404).json({ message: error.message })
-    } else if (results.length > 0) {
-      res.status(200).json(results[0])
-    } else {
-      res.status(404).json({ message: 'User not found' })
-    }
-  })
-}
+  const q = "SELECT * FROM User WHERE id = ?";
 
-// Add a new user
+  db.query(q, [req.params.id], (err, data) => {
+    if (err) return res.status(500).json(err);
+
+    return res.status(200).json(data[0]);
+  });
+};
+
 export const addUser = (req, res) => {
-  const { firstName, lastName, email } = req.body
-  const sql = 'INSERT INTO User (firstName, lastName, email) VALUES (?, ?)'
-  db.query(sql, [firstName, lastName, email], (error, results) => {
-    if (error) {
-      res.status(409).json({ message: error.message })
-    } else {
-      const newUser = { id: results.insertId, firstName, lastName, email }
-      res.status(201).json(newUser)
-    }
-  })
-}
+  const q =
+    "INSERT INTO User (firstName, lastName, email, password, phoneNumber) VALUES (?, ?, ?, ?, ?)";
 
-// Update a user by id
+  db.query(
+    q,
+    [req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.body.phoneNumber],
+    (err, data) => {
+      if (err) return res.status(500).json(err);
+
+      return res.status(200).json("User has been added successfully");
+    }
+  );
+};
+
 export const updateUser = (req, res) => {
-  const { id } = req.params
-  const { firstName, lastName, email } = req.body
-  const sql = 'UPDATE User SET firstName = ?, lastName = ?, email = ? WHERE id = ?'
-  db.query(sql, [firstName, lastName, email, id], (error, results) => {
-    if (error) {
-      res.status(404).json({ message: error.message })
-    } else if (results.affectedRows > 0) {
-      const updatedUser = { id, firstName, lastName, email }
-      res.status(200).json(updatedUser)
-    } else {
-      res.status(404).json({ message: 'User not found' })
-    }
-  })
-}
+  const q = "UPDATE User SET firstName = ?, lastName = ?, email = ?, password = ?, phoneNumber = ? WHERE id = ?";
 
-// Delete a user by id
-export const deleteUser = (req, res) => {
-  const { id } = req.params
-  const sql = 'DELETE FROM User WHERE id = ?'
-  db.query(sql, [id], (error, results) => {
-    if (error) {
-      res.status(404).json({ message: error.message })
-    } else if (results.affectedRows > 0) {
-      res.status(204).send()
-    } else {
-      res.status(404).json({ message: 'User not found' })
+  db.query(
+    q,
+    [req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.body.phoneNumber, req.params.id],
+    (err, data) => {
+      if (err) return res.status(500).json(err);
+
+      return res.status(200).json("User has been updated successfully");
     }
-  })
-}
+  );
+};
+
+export const deleteUser = (req, res) => {
+  const q = "DELETE FROM User WHERE id = ?";
+
+  db.query(q, [req.params.id], (err, data) => {
+    if (err) return res.status(500).json(err);
+
+    return res.status(200).json("User has been deleted successfully");
+  });
+};

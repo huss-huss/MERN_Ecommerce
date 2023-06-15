@@ -1,83 +1,59 @@
+import { db } from "../db.js";
 
 export const getAllCoupons = (req, res) => {
-  const sql = "SELECT * FROM Coupon";
-  connection.query(sql, (error, results) => {
-    if (error) {
-      res.status(404).json({ message: error.message });
-    } else {
-      res.status(200).json(results);
-    }
+  const q = "SELECT * FROM Coupon";
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).send(err);
+
+    return res.status(200).json(data);
   });
 };
 
 export const getCouponById = (req, res) => {
-  const { id } = req.params;
-  const sql = "SELECT * FROM Coupon WHERE id = ?";
-  connection.query(sql, [id], (error, results) => {
-    if (error) {
-      res.status(404).json({ message: error.message });
-    } else if (results.length > 0) {
-      res.status(200).json(results[0]);
-    } else {
-      res.status(404).json({ message: "Coupon not found" });
-    }
-  });
-};
+  const q = "SELECT * FROM Coupon WHERE id = ?";
 
-export const applyCoupon = (req, res) => {
-  const { code } = req.body;
-  const sql = "SELECT * FROM Coupon WHERE code = ?";
-  connection.query(sql, [code], (error, results) => {
-    if (error) {
-      res.status(404).json({ message: error.message });
-    } else if (results.length > 0) {
-      res.status(200).json(results[0]);
-    } else {
-      res.status(404).json({ message: "Coupon not found" });
-    }
+  db.query(q, [req.params.id], (err, data) => {
+    if (err) return res.status(500).json(err);
+
+    return res.status(200).json(data[0]);
   });
 };
 
 export const addCoupon = (req, res) => {
-  const { code, discount} = req.body;
-  const sql = "INSERT INTO Coupon (code, discount) VALUES (?, ?)";
-  connection.query(sql, [code, discount], (error, results) => {
-    if (error) {
-      res.status(409).json({ message: error.message });
-    } else {
-      const newCoupon = { id: results.insertId, code, discount};
-      res.status(201).json(newCoupon);
+  const q = "INSERT INTO Coupon (code, discount, order_id) VALUES (?, ?, ?)";
+
+  db.query(
+    q,
+    [req.body.code, req.body.discount, req.body.order_id],
+    (err, data) => {
+      if (err) return res.status(500).json(err);
+
+      return res.status(200).json("Coupon has been added successfully");
     }
-  });
+  );
 };
 
 export const updateCoupon = (req, res) => {
-  const { id } = req.params;
-  const { code, discount} = req.body;
-  const sql =
-    "UPDATE Coupon SET code = ?, discount = ? WHERE id = ?";
-  connection.query(sql, [code, discount, id], (error, results) => {
-    if (error) {
-      res.status(404).json({ message: error.message });
-    } else if (results.affectedRows > 0) {
-      const updatedCoupon = { id, code, discount,};
-      res.status(200).json(updatedCoupon);
-    } else {
-      res.status(404).json({ message: "Coupon not found" });
+  const q = "UPDATE Coupon SET code = ?, discount = ?, order_id = ? WHERE id = ?";
+
+  db.query(
+    q,
+    [req.body.code, req.body.discount, req.body.order_id, req.params.id],
+    (err, data) => {
+      if (err) return res.status(500).json(err);
+
+      return res.status(200).json("Coupon has been updated successfully");
     }
-  });
+  );
 };
-// delete a coupon by id
+
 export const deleteCoupon = (req, res) => {
-  const { id } = req.params;
-  const sql = "DELETE FROM Coupon WHERE id = ?";
-  connection.query(sql, [id], (error, results) => {
-    if (error) {
-      res.status(404).json({ message: error.message });
-    } else if (results.affectedRows > 0) {
-      res.status(200).json({ message: `Coupon with id ${id} deleted successfully` });
-    } else {
-      res.status(404).json({ message: "Coupon not found" });
-    }
+  const q = "DELETE FROM Coupon WHERE id = ?";
+
+  db.query(q, [req.params.id], (err, data) => {
+    if (err) return res.status(500).json(err);
+
+    return res.status(200).json("Coupon has been deleted successfully");
   });
 };
