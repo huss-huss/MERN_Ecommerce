@@ -10,6 +10,16 @@ export const getAllProductImages = (req, res) => {
   })
 }
 
+export const getProductImageById = (req, res) => {
+  const q = 'SELECT * FROM ProductImage WHERE id = ?'
+
+  db.query(q, [req.params.id], (err, data) => {
+    if (err) return res.status(500).json(err)
+
+    return res.status(200).json(data[0])
+  })
+}
+
 export const createProductImage = (req, res) => {
   const q =
     'INSERT INTO ProductImage (product_id, url, alt_text) VALUES (?, ?, ?)'
@@ -23,6 +33,16 @@ export const createProductImage = (req, res) => {
       return res.status(200).json('Product image has been added successfully')
     }
   )
+}
+
+export const updateProductImage = (req, res) => {
+  const q = 'UPDATE ProductImage SET url = ?, alt_text = ? WHERE id = ?'
+
+  db.query(q, [req.body.url, req.body.alt_text, req.params.id], (err, data) => {
+    if (err) return res.status(500).json(err)
+
+    return res.status(200).json('Product image has been updated successfully')
+  })
 }
 
 export const deleteProductImage = (req, res) => {
