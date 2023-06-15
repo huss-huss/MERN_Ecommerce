@@ -8,7 +8,7 @@ export const getAllCartItems = (req, res) => {
   jwt.verify(token, "jwtkey", (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
-    const q = "SELECT * FROM cart";
+    const q = "SELECT * FROM ShoppingCartItem";
     db.query(q, [userInfo.id], (err, data) => {
       if (err) return res.status(500).json(err);
 
@@ -24,7 +24,7 @@ export const getCartItem = (req, res) => {
   jwt.verify(token, "jwtkey", (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
-    const q = "SELECT * FROM cart WHERE `uid` = ?";
+    const q = "SELECT * FROM ShoppingCartItem WHERE ` shopping_cart_id` = ?";
     db.query(q, [userInfo.id], (err, data) => {
       if (err) return res.status(500).json(err);
 
@@ -41,10 +41,10 @@ export const addCartItem = (req, res) => {
     if (err) return res.status(403).json("Token is not valid!");
 
     const q =
-      "INSERT INTO cart(`pid`, `uid`, `quantity`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `quantity` = `quantity` + ?";
+      "INSERT INTO ShoppingCartItem(`product_id`, `shopping_cart_id`, `quantity`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `quantity` = `quantity` + ?";
 
     const values = [
-      req.body.pid,
+      req.body.product_id,
       userInfo.id,
       req.body.quantity,
       req.body.quantity,
@@ -64,7 +64,7 @@ export const updateCartItem = (req, res) => {
   jwt.verify(token, "jwtkey", (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
-    const q = "UPDATE cart SET `quantity`=? WHERE `id` = ? AND `uid` = ?";
+    const q = "UPDATE ShoppingCartItem SET `quantity`=? WHERE `id` = ? AND `shopping_cart_id` = ?";
 
     db.query(
       q,
@@ -84,7 +84,7 @@ export const deleteCartItem = (req, res) => {
   jwt.verify(token, "jwtkey", (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
-    const q = "DELETE FROM cart WHERE `id` = ? AND `uid` = ?";
+    const q = "DELETE FROM ShoppingCartItem WHERE `id` = ? AND `shopping_cart_id` = ?";
 
     db.query(q, [req.params.id, userInfo.id], (err, data) => {
       if (err) return res.status(500).json(err);

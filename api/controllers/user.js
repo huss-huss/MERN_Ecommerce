@@ -29,13 +29,13 @@ export const getUserById = (req, res) => {
 
 // Add a new user
 export const addUser = (req, res) => {
-  const { username, email } = req.body
-  const sql = 'INSERT INTO User (username, email) VALUES (?, ?)'
-  db.query(sql, [username, email], (error, results) => {
+  const { firstName, lastName, email } = req.body
+  const sql = 'INSERT INTO User (firstName, lastName, email) VALUES (?, ?)'
+  db.query(sql, [firstName, lastName, email], (error, results) => {
     if (error) {
       res.status(409).json({ message: error.message })
     } else {
-      const newUser = { id: results.insertId, username, email }
+      const newUser = { id: results.insertId, firstName, lastName, email }
       res.status(201).json(newUser)
     }
   })
@@ -44,13 +44,13 @@ export const addUser = (req, res) => {
 // Update a user by id
 export const updateUser = (req, res) => {
   const { id } = req.params
-  const { username, email } = req.body
-  const sql = 'UPDATE User SET username = ?, email = ? WHERE id = ?'
-  db.query(sql, [username, email, id], (error, results) => {
+  const { firstName, lastName, email } = req.body
+  const sql = 'UPDATE User SET firstName = ?, lastName = ?, email = ? WHERE id = ?'
+  db.query(sql, [firstName, lastName, email, id], (error, results) => {
     if (error) {
       res.status(404).json({ message: error.message })
     } else if (results.affectedRows > 0) {
-      const updatedUser = { id, username, email }
+      const updatedUser = { id, firstName, lastName, email }
       res.status(200).json(updatedUser)
     } else {
       res.status(404).json({ message: 'User not found' })

@@ -1,7 +1,7 @@
 import { db } from "../db.js";
 
 export const getAllProductCategories = (req, res) => {
-  const q = "SELECT * FROM product_categories";
+  const q = "SELECT * FROM Category";
 
   db.query(q, (err, data) => {
     if (err) return res.status(500).send(err);
@@ -11,7 +11,7 @@ export const getAllProductCategories = (req, res) => {
 };
 
 export const getProductCategoryById = (req, res) => {
-  const q = "SELECT * FROM product_categories WHERE id = ?";
+  const q = "SELECT * FROM Category WHERE id = ?";
 
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.status(500).json(err);
@@ -21,7 +21,7 @@ export const getProductCategoryById = (req, res) => {
 };
 
 export const addProductCategory = (req, res) => {
-  const q = "INSERT INTO product_categories (name) VALUES (?)";
+  const q = "INSERT INTO Category (name) VALUES (?)";
 
   db.query(q, [req.body.name], (err, data) => {
     if (err) return res.status(500).json(err);
@@ -31,7 +31,7 @@ export const addProductCategory = (req, res) => {
 };
 
 export const updateProductCategory = (req, res) => {
-  const q = "UPDATE product_categories SET name = ? WHERE id = ?";
+  const q = "UPDATE Category SET name = ? WHERE id = ?";
 
   db.query(q, [req.body.name, req.params.id], (err, data) => {
     if (err) return res.status(500).json(err);
@@ -41,7 +41,7 @@ export const updateProductCategory = (req, res) => {
 };
 
 export const deleteProductCategory = (req, res) => {
-  const q = "DELETE FROM product_categories WHERE id = ?";
+  const q = "DELETE FROM Category WHERE id = ?";
 
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.status(500).json(err);

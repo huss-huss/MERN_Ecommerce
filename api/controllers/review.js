@@ -2,7 +2,7 @@ import { db } from "../db.js";
 
 // Get all reviews
 export const getAllReviews = (req, res) => {
-  const q = "SELECT * FROM reviews";
+  const q = "SELECT * FROM Review";
 
   db.query(q, (err, data) => {
     if (err) return res.status(500).send(err);
@@ -13,7 +13,7 @@ export const getAllReviews = (req, res) => {
 
 // Get a review by id
 export const getReviewById = (req, res) => {
-  const q = "SELECT * FROM reviews WHERE id = ?";
+  const q = "SELECT * FROM Review WHERE id = ?";
 
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.status(500).json(err);
@@ -25,11 +25,11 @@ export const getReviewById = (req, res) => {
 // Add a new review
 export const addReview = (req, res) => {
   const q =
-    "INSERT INTO reviews (product_id, user_id, rating, comment) VALUES (?, ?, ?, ?)";
+    "INSERT INTO Review (product_id, user_id, rating, description) VALUES (?, ?, ?, ?)";
 
   db.query(
     q,
-    [req.body.product_id, req.body.user_id, req.body.rating, req.body.comment],
+    [req.body.product_id, req.body.user_id, req.body.rating, req.body.description],
     (err, data) => {
       if (err) return res.status(500).json(err);
 
@@ -40,7 +40,7 @@ export const addReview = (req, res) => {
 
 // Update a review
 export const updateReview = (req, res) => {
-  const q = "UPDATE reviews SET rating = ?, comment = ? WHERE id = ?";
+  const q = "UPDATE Review SET rating = ?, description = ? WHERE id = ?";
 
   db.query(
     q,
@@ -55,7 +55,7 @@ export const updateReview = (req, res) => {
 
 // Delete a review
 export const deleteReview = (req, res) => {
-  const q = "DELETE FROM reviews WHERE id = ?";
+  const q = "DELETE FROM Review WHERE id = ?";
 
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.status(500).json(err);

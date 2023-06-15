@@ -2,9 +2,9 @@ import { db } from "../db.js";
 
 // Get all wishlist items for a user
 export const getAllWishlistItems = (req, res) => {
-  const q = "SELECT * FROM wishlist_items WHERE user_id = ?";
+  const q = "SELECT * FROM WishlistItem WHERE wishlist_id = ?";
 
-  db.query(q, [req.params.userId], (err, data) => {
+  db.query(q, [req.params.wishlist_id], (err, data) => {
     if (err) return res.status(500).json(err);
 
     return res.status(200).json(data);
@@ -13,7 +13,7 @@ export const getAllWishlistItems = (req, res) => {
 
 // Get a specific wishlist item by ID
 export const getWishlistItemById = (req, res) => {
-  const q = "SELECT * FROM wishlist_items WHERE id = ?";
+  const q = "SELECT * FROM WishlistItem WHERE id = ?";
 
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.status(500).json(err);
@@ -24,9 +24,9 @@ export const getWishlistItemById = (req, res) => {
 
 // Add a new wishlist item
 export const addWishlistItem = (req, res) => {
-  const q = "INSERT INTO wishlist_items (user_id, product_id) VALUES (?, ?)";
+  const q = "INSERT INTO WishlistItem (wishlist_id, product_id) VALUES (?, ?)";
 
-  db.query(q, [req.body.user_id, req.body.product_id], (err, data) => {
+  db.query(q, [req.body.wishlist_id, req.body.product_id], (err, data) => {
     if (err) return res.status(500).json(err);
 
     return res
@@ -37,7 +37,7 @@ export const addWishlistItem = (req, res) => {
 
 // Update a wishlist item by ID
 export const updateWishlistItem = (req, res) => {
-  const q = "UPDATE wishlist_items SET product_id = ? WHERE id = ?";
+  const q = "UPDATE WishlistItem SET product_id = ? WHERE id = ?";
 
   db.query(q, [req.body.product_id, req.params.id], (err, data) => {
     if (err) return res.status(500).json(err);
@@ -48,7 +48,7 @@ export const updateWishlistItem = (req, res) => {
 
 // Delete a wishlist item by ID
 export const deleteWishlistItem = (req, res) => {
-  const q = "DELETE FROM wishlist_items WHERE id = ?";
+  const q = "DELETE FROM WishlistItem WHERE id = ?";
 
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.status(500).json(err);

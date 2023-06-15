@@ -1,7 +1,7 @@
 import { db } from "../db.js";
 
 export const getAllOrders = (req, res) => {
-  const q = "SELECT * FROM orders";
+  const q = "SELECT * FROM Order";
 
   db.query(q, (err, data) => {
     if (err) return res.status(500).send(err);
@@ -11,7 +11,7 @@ export const getAllOrders = (req, res) => {
 };
 
 export const getOrderById = (req, res) => {
-  const q = "SELECT * FROM orders WHERE id = ?";
+  const q = "SELECT * FROM Order WHERE id = ?";
 
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.status(500).json(err);
@@ -22,11 +22,11 @@ export const getOrderById = (req, res) => {
 
 export const addOrder = (req, res) => {
   const q =
-    "INSERT INTO orders (user_id, total_amount, status) VALUES (?, ?, ?)";
+    "INSERT INTO Order (user_id, total_price, order_status_id) VALUES (?, ?, ?)";
 
   db.query(
     q,
-    [req.body.user_id, req.body.total_amount, req.body.status],
+    [req.body.user_id, req.body.total_price, req.body.order_status_id],
     (err, data) => {
       if (err) return res.status(500).json(err);
 
@@ -36,7 +36,7 @@ export const addOrder = (req, res) => {
 };
 
 export const updateOrder = (req, res) => {
-  const q = "UPDATE orders SET status = ? WHERE id = ?";
+  const q = "UPDATE Order SET order_status_id = ? WHERE id = ?";
 
   db.query(q, [req.body.status, req.params.id], (err, data) => {
     if (err) return res.status(500).json(err);
@@ -46,7 +46,7 @@ export const updateOrder = (req, res) => {
 };
 
 export const deleteOrder = (req, res) => {
-  const q = "DELETE FROM orders WHERE id = ?";
+  const q = "DELETE FROM Order WHERE id = ?";
 
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.status(500).json(err);

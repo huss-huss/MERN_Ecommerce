@@ -1,7 +1,7 @@
 import { db } from "../db.js";
 
 export const getAllProducts = (req, res) => {
-  const q = "SELECT * FROM product";
+  const q = "SELECT * FROM Product";
 
   db.query(q, (err, data) => {
     if (err) return res.status(500).send(err);
@@ -11,7 +11,7 @@ export const getAllProducts = (req, res) => {
 };
 
 export const getProductById = (req, res) => {
-  const q = "SELECT * FROM product WHERE id = ?";
+  const q = "SELECT * FROM Product WHERE id = ?";
 
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.status(500).json(err);
@@ -22,7 +22,7 @@ export const getProductById = (req, res) => {
 
 export const addProduct = (req, res) => {
   const q =
-    "INSERT INTO product (name, description, price, category, image) VALUES (?, ?, ?, ?, ?)";
+    "INSERT INTO Product (name, description, price) VALUES (?, ?, ?)";
 
   db.query(
     q,
@@ -30,8 +30,6 @@ export const addProduct = (req, res) => {
       req.body.name,
       req.body.description,
       req.body.price,
-      req.body.category_id,
-      req.body.image_url,
     ],
     (err, data) => {
       if (err) return res.status(500).json(err);
@@ -43,7 +41,7 @@ export const addProduct = (req, res) => {
 
 export const updateProduct = (req, res) => {
   const q =
-    "UPDATE product SET name = ?, description = ?, price = ?, category_id = ?, image_url = ? WHERE id = ?";
+    "UPDATE Product SET name = ?, description = ?, price = ? WHERE id = ?";
 
   db.query(
     q,
@@ -51,9 +49,6 @@ export const updateProduct = (req, res) => {
       req.body.name,
       req.body.description,
       req.body.price,
-      req.body.category_id,
-      req.body.image_url,
-      req.params.id,
     ],
     (err, data) => {
       if (err) return res.status(500).json(err);
@@ -64,7 +59,7 @@ export const updateProduct = (req, res) => {
 };
 
 export const deleteProduct = (req, res) => {
-  const q = "DELETE FROM product WHERE id = ?";
+  const q = "DELETE FROM Product WHERE id = ?";
 
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.status(500).json(err);
